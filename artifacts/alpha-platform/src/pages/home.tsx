@@ -59,7 +59,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center w-full" dir="rtl">
 
       {/* ── HERO ── */}
-      <section className="relative w-full min-h-[75vh] flex flex-col items-center justify-center overflow-hidden">
+      <section className="relative w-full flex flex-col overflow-hidden">
         {/* Background gradient layers */}
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background z-0" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(43_89%_52%_/_0.07)_0%,_transparent_70%)] z-0" />
@@ -67,13 +67,12 @@ export default function Home() {
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none z-0 select-none">
           <span className="font-cinzel text-[28vw] text-primary leading-none">𒀭</span>
         </div>
-        {/* Geometric border lines */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent z-10" />
 
-        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+        {/* Hero content */}
+        <div className="relative z-10 text-center px-6 max-w-5xl mx-auto w-full pt-12 pb-10 md:pt-20 md:pb-16">
           {/* Logo mark above title */}
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="flex justify-center mb-8">
-            <div className="relative w-24 h-24 md:w-32 md:h-32">
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6 }} className="flex justify-center mb-6 md:mb-8">
+            <div className="relative w-20 h-20 md:w-32 md:h-32">
               <div className="absolute inset-0 rounded-full bg-primary/10 blur-xl" />
               <img
                 src="/alpha-logo.png"
@@ -98,7 +97,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
-            className="font-tajawal text-2xl md:text-3xl text-foreground/70 mb-2"
+            className="font-tajawal text-xl md:text-3xl text-foreground/70 mb-2"
           >
             {settings?.heroTitleAr || "منصة ألفا"}
           </motion.p>
@@ -107,7 +106,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="font-tajawal text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto"
+            className="font-tajawal text-sm md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto"
           >
             {settings?.heroSubtitleAr || "بوابتك نحو التقنية والمعرفة — ذكاء اصطناعي، تعليم، رياضة، هندسة، وأكثر"}
           </motion.p>
@@ -115,44 +114,51 @@ export default function Home() {
           {/* Sumerian decorative text */}
           {settings?.sumerianText && (
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55 }}
-              className="font-cinzel text-primary/30 text-2xl tracking-[0.5em] mb-10 select-none">
+              className="font-cinzel text-primary/30 text-xl tracking-[0.4em] mb-8 select-none">
               {settings.sumerianText}
             </motion.p>
           )}
 
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex gap-4 justify-center flex-wrap">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="flex gap-3 justify-center flex-wrap">
             <button
               onClick={() => sectionsRef.current?.scrollIntoView({ behavior: "smooth" })}
-              className="px-8 py-3.5 bg-primary text-primary-foreground font-tajawal font-bold rounded-lg hover:bg-accent transition-all hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5"
+              className="px-6 py-3 md:px-8 md:py-3.5 bg-primary text-primary-foreground font-tajawal font-bold rounded-lg hover:bg-accent transition-all hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 text-sm md:text-base"
             >
               استكشف الأقسام
             </button>
             <Link href="/news">
-              <div className="px-8 py-3.5 border border-primary/40 text-primary font-tajawal font-bold rounded-lg hover:bg-primary/10 transition-all hover:-translate-y-0.5">
+              <div className="px-6 py-3 md:px-8 md:py-3.5 border border-primary/40 text-primary font-tajawal font-bold rounded-lg hover:bg-primary/10 transition-all hover:-translate-y-0.5 text-sm md:text-base">
                 آخر الأخبار
               </div>
             </Link>
           </motion.div>
         </div>
 
-        {/* Stats bar */}
+        {/* Stats bar — in normal flow, not absolute */}
         {stats && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-            className="absolute bottom-0 left-0 right-0 bg-card/50 border-t border-primary/10 backdrop-blur-sm">
-            <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-center gap-8 md:gap-16 flex-wrap">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="relative z-10 w-full bg-card/60 border-t border-primary/15 backdrop-blur-sm"
+          >
+            <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-center gap-6 md:gap-16">
               {[
                 { label: "قسم", value: stats.totalSections },
                 { label: "منصة", value: stats.totalPlatforms },
                 { label: "خبر", value: stats.totalNews },
               ].map(({ label, value }) => (
-                <div key={label} className="flex items-center gap-2">
-                  <span className="font-cinzel text-2xl text-primary font-bold">{value}</span>
-                  <span className="font-tajawal text-muted-foreground text-sm">{label}</span>
+                <div key={label} className="flex items-center gap-1.5">
+                  <span className="font-cinzel text-xl md:text-2xl text-primary font-bold">{value}</span>
+                  <span className="font-tajawal text-muted-foreground text-xs md:text-sm">{label}</span>
                 </div>
               ))}
             </div>
           </motion.div>
         )}
+
+        {/* Bottom border line */}
+        <div className="relative z-10 h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
       </section>
 
       {/* ── ACTIVE ADS ── */}
