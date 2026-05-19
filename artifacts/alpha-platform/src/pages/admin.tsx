@@ -63,7 +63,8 @@ function SectionForm({ initial, sections, onSave, onCancel }: { initial?: Partia
 
 function PlatformForm({ initial, sections, onSave, onCancel }: { initial?: Partial<Platform>; sections?: Section[]; onSave: (d: Record<string, unknown>) => void; onCancel: () => void }) {
   const defaultSectionId = initial?.sectionId ?? sections?.[0]?.id ?? 0;
-  const [form, setForm] = useState({ name: "", nameAr: "", slug: "", type: "telegram_bot", url: "", imageUrl: "", sectionId: defaultSectionId, description: "", descriptionAr: "", isActive: true, isFeatured: false, order: 0, tags: "", ...initial, sectionId: defaultSectionId });
+  const merged = { name: "", nameAr: "", slug: "", type: "telegram_bot", url: "", imageUrl: "", description: "", descriptionAr: "", isActive: true, isFeatured: false, order: 0, tags: "", ...initial };
+  const [form, setForm] = useState({ ...merged, sectionId: defaultSectionId });
   const set = (k: string, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
   return (
     <div className="grid gap-4" dir="rtl">
