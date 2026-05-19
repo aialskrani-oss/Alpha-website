@@ -1,22 +1,32 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Alpha Platform API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: sections
+    description: Platform sections/categories
+  - name: platforms
+    description: Platforms, bots, tools, and services
+  - name: news
+    description: News and announcements
+  - name: advertisements
+    description: Advertisements and banners
+  - name: settings
+    description: Site settings
+  - name: stats
+    description: Platform statistics
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +34,408 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /sections:
+    get:
+      operationId: listSections
+      tags: [sections]
+      summary: List all sections
+      responses:
+        "200":
+          description: List of sections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Section"
+    post:
+      operationId: createSection
+      tags: [sections]
+      summary: Create a new section
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SectionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Section"
+
+  /sections/{id}:
+    get:
+      operationId: getSection
+      tags: [sections]
+      summary: Get a section by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Section
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Section"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateSection
+      tags: [sections]
+      summary: Update a section
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SectionUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Section"
+    delete:
+      operationId: deleteSection
+      tags: [sections]
+      summary: Delete a section
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /platforms:
+    get:
+      operationId: listPlatforms
+      tags: [platforms]
+      summary: List all platforms
+      parameters:
+        - name: sectionId
+          in: query
+          schema:
+            type: integer
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of platforms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Platform"
+    post:
+      operationId: createPlatform
+      tags: [platforms]
+      summary: Create a new platform
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlatformInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Platform"
+
+  /platforms/{id}:
+    get:
+      operationId: getPlatform
+      tags: [platforms]
+      summary: Get a platform by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Platform
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Platform"
+        "404":
+          description: Not found
+    patch:
+      operationId: updatePlatform
+      tags: [platforms]
+      summary: Update a platform
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlatformUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Platform"
+    delete:
+      operationId: deletePlatform
+      tags: [platforms]
+      summary: Delete a platform
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /news:
+    get:
+      operationId: listNews
+      tags: [news]
+      summary: List all news posts
+      parameters:
+        - name: pinned
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NewsPost"
+    post:
+      operationId: createNewsPost
+      tags: [news]
+      summary: Create a news post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsPostInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsPost"
+
+  /news/{id}:
+    get:
+      operationId: getNewsPost
+      tags: [news]
+      summary: Get a news post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: News post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsPost"
+    patch:
+      operationId: updateNewsPost
+      tags: [news]
+      summary: Update a news post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsPostUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsPost"
+    delete:
+      operationId: deleteNewsPost
+      tags: [news]
+      summary: Delete a news post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /advertisements:
+    get:
+      operationId: listAdvertisements
+      tags: [advertisements]
+      summary: List advertisements
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Advertisements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Advertisement"
+    post:
+      operationId: createAdvertisement
+      tags: [advertisements]
+      summary: Create an advertisement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdvertisementInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Advertisement"
+
+  /advertisements/{id}:
+    patch:
+      operationId: updateAdvertisement
+      tags: [advertisements]
+      summary: Update an advertisement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdvertisementUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Advertisement"
+    delete:
+      operationId: deleteAdvertisement
+      tags: [advertisements]
+      summary: Delete an advertisement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get site settings
+      responses:
+        "200":
+          description: Settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+    patch:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update site settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteSettingsUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Get platform statistics
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStats"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +446,417 @@ components:
       required:
         - status
 
+    Section:
+      type: object
+      required: [id, name, slug, icon, order, isActive, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nameAr:
+          type: ["string", "null"]
+        slug:
+          type: string
+        icon:
+          type: string
+        description:
+          type: ["string", "null"]
+        descriptionAr:
+          type: ["string", "null"]
+        order:
+          type: integer
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+
+    SectionInput:
+      type: object
+      required: [name, slug, icon]
+      properties:
+        name:
+          type: string
+        nameAr:
+          type: string
+        slug:
+          type: string
+        icon:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        order:
+          type: integer
+        isActive:
+          type: boolean
+
+    SectionUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        nameAr:
+          type: string
+        slug:
+          type: string
+        icon:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        order:
+          type: integer
+        isActive:
+          type: boolean
+
+    Platform:
+      type: object
+      required: [id, name, slug, type, sectionId, isActive, isFeatured, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nameAr:
+          type: ["string", "null"]
+        slug:
+          type: string
+        description:
+          type: ["string", "null"]
+        descriptionAr:
+          type: ["string", "null"]
+        type:
+          type: string
+          description: "telegram_bot | website | program | tool"
+        url:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        sectionId:
+          type: integer
+        isActive:
+          type: boolean
+        isFeatured:
+          type: boolean
+        order:
+          type: integer
+        tags:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    PlatformInput:
+      type: object
+      required: [name, slug, type, sectionId]
+      properties:
+        name:
+          type: string
+        nameAr:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
+        imageUrl:
+          type: string
+        sectionId:
+          type: integer
+        isActive:
+          type: boolean
+        isFeatured:
+          type: boolean
+        order:
+          type: integer
+        tags:
+          type: string
+
+    PlatformUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        nameAr:
+          type: string
+        slug:
+          type: string
+        description:
+          type: string
+        descriptionAr:
+          type: string
+        type:
+          type: string
+        url:
+          type: string
+        imageUrl:
+          type: string
+        sectionId:
+          type: integer
+        isActive:
+          type: boolean
+        isFeatured:
+          type: boolean
+        order:
+          type: integer
+        tags:
+          type: string
+
+    NewsPost:
+      type: object
+      required: [id, title, slug, isPinned, isPublished, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        titleAr:
+          type: ["string", "null"]
+        slug:
+          type: string
+        content:
+          type: ["string", "null"]
+        contentAr:
+          type: ["string", "null"]
+        excerpt:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        isPinned:
+          type: boolean
+        isPublished:
+          type: boolean
+        category:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: ["string", "null"]
+
+    NewsPostInput:
+      type: object
+      required: [title, slug]
+      properties:
+        title:
+          type: string
+        titleAr:
+          type: string
+        slug:
+          type: string
+        content:
+          type: string
+        contentAr:
+          type: string
+        excerpt:
+          type: string
+        imageUrl:
+          type: string
+        isPinned:
+          type: boolean
+        isPublished:
+          type: boolean
+        category:
+          type: string
+
+    NewsPostUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        titleAr:
+          type: string
+        slug:
+          type: string
+        content:
+          type: string
+        contentAr:
+          type: string
+        excerpt:
+          type: string
+        imageUrl:
+          type: string
+        isPinned:
+          type: boolean
+        isPublished:
+          type: boolean
+        category:
+          type: string
+
+    Advertisement:
+      type: object
+      required: [id, title, isActive, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        imageUrl:
+          type: ["string", "null"]
+        linkUrl:
+          type: ["string", "null"]
+        position:
+          type: ["string", "null"]
+        isActive:
+          type: boolean
+        order:
+          type: integer
+        createdAt:
+          type: string
+
+    AdvertisementInput:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+        imageUrl:
+          type: string
+        linkUrl:
+          type: string
+        position:
+          type: string
+        isActive:
+          type: boolean
+        order:
+          type: integer
+
+    AdvertisementUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        imageUrl:
+          type: string
+        linkUrl:
+          type: string
+        position:
+          type: string
+        isActive:
+          type: boolean
+        order:
+          type: integer
+
+    SiteSettings:
+      type: object
+      required: [id, siteName]
+      properties:
+        id:
+          type: integer
+        siteName:
+          type: string
+        siteNameAr:
+          type: ["string", "null"]
+        logoUrl:
+          type: ["string", "null"]
+        faviconUrl:
+          type: ["string", "null"]
+        primaryColor:
+          type: ["string", "null"]
+        secondaryColor:
+          type: ["string", "null"]
+        accentColor:
+          type: ["string", "null"]
+        heroTitle:
+          type: ["string", "null"]
+        heroTitleAr:
+          type: ["string", "null"]
+        heroSubtitle:
+          type: ["string", "null"]
+        heroSubtitleAr:
+          type: ["string", "null"]
+        sumerianText:
+          type: ["string", "null"]
+        footerText:
+          type: ["string", "null"]
+        footerTextAr:
+          type: ["string", "null"]
+        socialTelegram:
+          type: ["string", "null"]
+        socialTwitter:
+          type: ["string", "null"]
+        socialYoutube:
+          type: ["string", "null"]
+        adminPassword:
+          type: ["string", "null"]
+        maintenanceMode:
+          type: boolean
+
+    SiteSettingsUpdate:
+      type: object
+      properties:
+        siteName:
+          type: string
+        siteNameAr:
+          type: string
+        logoUrl:
+          type: string
+        faviconUrl:
+          type: string
+        primaryColor:
+          type: string
+        secondaryColor:
+          type: string
+        accentColor:
+          type: string
+        heroTitle:
+          type: string
+        heroTitleAr:
+          type: string
+        heroSubtitle:
+          type: string
+        heroSubtitleAr:
+          type: string
+        sumerianText:
+          type: string
+        footerText:
+          type: string
+        footerTextAr:
+          type: string
+        socialTelegram:
+          type: string
+        socialTwitter:
+          type: string
+        socialYoutube:
+          type: string
+        adminPassword:
+          type: string
+        maintenanceMode:
+          type: boolean
+
+    PlatformStats:
+      type: object
+      required: [totalSections, totalPlatforms, totalNews, featuredPlatforms, activePlatforms]
+      properties:
+        totalSections:
+          type: integer
+        totalPlatforms:
+          type: integer
+        totalNews:
+          type: integer
+        featuredPlatforms:
+          type: integer
+        activePlatforms:
+          type: integer
+        platformsByType:
+          type: object
+          additionalProperties:
+            type: integer
+        platformsBySection:
+          type: array
+          items:
+            type: object
+            required: [sectionId, sectionName, count]
+            properties:
+              sectionId:
+                type: integer
+              sectionName:
+                type: string
+              count:
+                type: integer
