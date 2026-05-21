@@ -783,6 +783,22 @@ components:
           type: ["string", "null"]
         socialYoutube:
           type: ["string", "null"]
+        socialInstagram:
+          type: ["string", "null"]
+        socialFacebook:
+          type: ["string", "null"]
+        socialWhatsapp:
+          type: ["string", "null"]
+        socialTiktok:
+          type: ["string", "null"]
+        contactAddress:
+          type: ["string", "null"]
+        contactAddressAr:
+          type: ["string", "null"]
+        contactEmail:
+          type: ["string", "null"]
+        contactPhone:
+          type: ["string", "null"]
         adminPassword:
           type: ["string", "null"]
         maintenanceMode:
@@ -824,6 +840,22 @@ components:
         socialTwitter:
           type: string
         socialYoutube:
+          type: string
+        socialInstagram:
+          type: string
+        socialFacebook:
+          type: string
+        socialWhatsapp:
+          type: string
+        socialTiktok:
+          type: string
+        contactAddress:
+          type: string
+        contactAddressAr:
+          type: string
+        contactEmail:
+          type: string
+        contactPhone:
           type: string
         adminPassword:
           type: string

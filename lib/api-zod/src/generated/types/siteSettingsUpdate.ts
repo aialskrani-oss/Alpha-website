@@ -24,6 +24,14 @@ export interface SiteSettingsUpdate {
   socialTelegram?: string;
   socialTwitter?: string;
   socialYoutube?: string;
+  socialInstagram?: string;
+  socialFacebook?: string;
+  socialWhatsapp?: string;
+  socialTiktok?: string;
+  contactAddress?: string;
+  contactAddressAr?: string;
+  contactEmail?: string;
+  contactPhone?: string;
   adminPassword?: string;
   maintenanceMode?: boolean;
 }

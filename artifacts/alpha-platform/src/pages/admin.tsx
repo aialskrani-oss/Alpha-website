@@ -232,9 +232,23 @@ function SettingsEditor() {
       </TabsContent>
 
       <TabsContent value="social" className="grid gap-4">
-        <div><Label className="font-tajawal mb-1 block">تلغرام</Label><Input value={String(form.socialTelegram || "")} onChange={(e) => set("socialTelegram", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://t.me/..." /></div>
-        <div><Label className="font-tajawal mb-1 block">تويتر / X</Label><Input value={String(form.socialTwitter || "")} onChange={(e) => set("socialTwitter", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://x.com/..." /></div>
-        <div><Label className="font-tajawal mb-1 block">يوتيوب</Label><Input value={String(form.socialYoutube || "")} onChange={(e) => set("socialYoutube", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://youtube.com/..." /></div>
+        <p className="font-tajawal text-sm text-muted-foreground pb-1 border-b border-primary/10">روابط التواصل الاجتماعي</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div><Label className="font-tajawal mb-1 block">تلغرام</Label><Input value={String(form.socialTelegram || "")} onChange={(e) => set("socialTelegram", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://t.me/..." /></div>
+          <div><Label className="font-tajawal mb-1 block">واتساب</Label><Input value={String(form.socialWhatsapp || "")} onChange={(e) => set("socialWhatsapp", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://wa.me/..." /></div>
+          <div><Label className="font-tajawal mb-1 block">تويتر / X</Label><Input value={String(form.socialTwitter || "")} onChange={(e) => set("socialTwitter", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://x.com/..." /></div>
+          <div><Label className="font-tajawal mb-1 block">انستقرام</Label><Input value={String(form.socialInstagram || "")} onChange={(e) => set("socialInstagram", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://instagram.com/..." /></div>
+          <div><Label className="font-tajawal mb-1 block">يوتيوب</Label><Input value={String(form.socialYoutube || "")} onChange={(e) => set("socialYoutube", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://youtube.com/..." /></div>
+          <div><Label className="font-tajawal mb-1 block">فيسبوك</Label><Input value={String(form.socialFacebook || "")} onChange={(e) => set("socialFacebook", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://facebook.com/..." /></div>
+          <div><Label className="font-tajawal mb-1 block">تيك توك</Label><Input value={String(form.socialTiktok || "")} onChange={(e) => set("socialTiktok", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="https://tiktok.com/@..." /></div>
+        </div>
+        <p className="font-tajawal text-sm text-muted-foreground pb-1 border-b border-primary/10 mt-2">معلومات التواصل</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div><Label className="font-tajawal mb-1 block">البريد الإلكتروني</Label><Input value={String(form.contactEmail || "")} onChange={(e) => set("contactEmail", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="contact@alpha.platform" /></div>
+          <div><Label className="font-tajawal mb-1 block">رقم الهاتف</Label><Input value={String(form.contactPhone || "")} onChange={(e) => set("contactPhone", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="+964 ..." /></div>
+          <div><Label className="font-tajawal mb-1 block">العنوان (عربي)</Label><Input value={String(form.contactAddressAr || "")} onChange={(e) => set("contactAddressAr", e.target.value)} className="bg-background border-primary/20" dir="rtl" placeholder="بغداد، العراق" /></div>
+          <div><Label className="font-tajawal mb-1 block">العنوان (English)</Label><Input value={String(form.contactAddress || "")} onChange={(e) => set("contactAddress", e.target.value)} className="bg-background border-primary/20" dir="ltr" placeholder="Baghdad, Iraq" /></div>
+        </div>
       </TabsContent>
 
       <Button onClick={save} disabled={updateSettings.isPending} className="mt-6 font-tajawal bg-primary text-primary-foreground px-8">

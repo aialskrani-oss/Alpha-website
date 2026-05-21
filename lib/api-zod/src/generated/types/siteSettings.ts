@@ -42,6 +42,22 @@ export interface SiteSettings {
   /** @nullable */
   socialYoutube?: string | null;
   /** @nullable */
+  socialInstagram?: string | null;
+  /** @nullable */
+  socialFacebook?: string | null;
+  /** @nullable */
+  socialWhatsapp?: string | null;
+  /** @nullable */
+  socialTiktok?: string | null;
+  /** @nullable */
+  contactAddress?: string | null;
+  /** @nullable */
+  contactAddressAr?: string | null;
+  /** @nullable */
+  contactEmail?: string | null;
+  /** @nullable */
+  contactPhone?: string | null;
+  /** @nullable */
   adminPassword?: string | null;
   maintenanceMode?: boolean;
 }

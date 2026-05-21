@@ -437,6 +437,14 @@ export const GetSettingsResponse = zod.object({
   "socialTelegram": zod.string().nullish(),
   "socialTwitter": zod.string().nullish(),
   "socialYoutube": zod.string().nullish(),
+  "socialInstagram": zod.string().nullish(),
+  "socialFacebook": zod.string().nullish(),
+  "socialWhatsapp": zod.string().nullish(),
+  "socialTiktok": zod.string().nullish(),
+  "contactAddress": zod.string().nullish(),
+  "contactAddressAr": zod.string().nullish(),
+  "contactEmail": zod.string().nullish(),
+  "contactPhone": zod.string().nullish(),
   "adminPassword": zod.string().nullish(),
   "maintenanceMode": zod.boolean().optional()
 })
@@ -463,6 +471,14 @@ export const UpdateSettingsBody = zod.object({
   "socialTelegram": zod.string().optional(),
   "socialTwitter": zod.string().optional(),
   "socialYoutube": zod.string().optional(),
+  "socialInstagram": zod.string().optional(),
+  "socialFacebook": zod.string().optional(),
+  "socialWhatsapp": zod.string().optional(),
+  "socialTiktok": zod.string().optional(),
+  "contactAddress": zod.string().optional(),
+  "contactAddressAr": zod.string().optional(),
+  "contactEmail": zod.string().optional(),
+  "contactPhone": zod.string().optional(),
   "adminPassword": zod.string().optional(),
   "maintenanceMode": zod.boolean().optional()
 })
@@ -486,6 +502,14 @@ export const UpdateSettingsResponse = zod.object({
   "socialTelegram": zod.string().nullish(),
   "socialTwitter": zod.string().nullish(),
   "socialYoutube": zod.string().nullish(),
+  "socialInstagram": zod.string().nullish(),
+  "socialFacebook": zod.string().nullish(),
+  "socialWhatsapp": zod.string().nullish(),
+  "socialTiktok": zod.string().nullish(),
+  "contactAddress": zod.string().nullish(),
+  "contactAddressAr": zod.string().nullish(),
+  "contactEmail": zod.string().nullish(),
+  "contactPhone": zod.string().nullish(),
   "adminPassword": zod.string().nullish(),
   "maintenanceMode": zod.boolean().optional()
 })
