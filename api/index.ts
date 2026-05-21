@@ -1,24 +1,116 @@
 import express from "express";
 import cors from "cors";
-import { db } from "@workspace/db";
-import {
-  sectionsTable,
-  platformsTable,
-  newsPostsTable,
-  advertisementsTable,
-  siteSettingsTable,
-} from "@workspace/db/schema";
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
+import { pgTable, serial, text, boolean, integer, timestamp } from "drizzle-orm/pg-core";
 import { eq, asc } from "drizzle-orm";
+
+const { Pool } = pg;
+
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required");
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+const sectionsTable = pgTable("sections", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  nameAr: text("name_ar"),
+  slug: text("slug").notNull().unique(),
+  icon: text("icon").notNull().default("folder"),
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  order: integer("order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+const platformsTable = pgTable("platforms", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  nameAr: text("name_ar"),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  descriptionAr: text("description_ar"),
+  type: text("type").notNull().default("telegram_bot"),
+  url: text("url"),
+  imageUrl: text("image_url"),
+  sectionId: integer("section_id").notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+  isFeatured: boolean("is_featured").notNull().default(false),
+  order: integer("order").notNull().default(0),
+  tags: text("tags"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+const newsPostsTable = pgTable("news_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  titleAr: text("title_ar"),
+  slug: text("slug").notNull().unique(),
+  content: text("content"),
+  contentAr: text("content_ar"),
+  excerpt: text("excerpt"),
+  imageUrl: text("image_url"),
+  isPinned: boolean("is_pinned").notNull().default(false),
+  isPublished: boolean("is_published").notNull().default(true),
+  category: text("category"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at"),
+});
+
+const advertisementsTable = pgTable("advertisements", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  imageUrl: text("image_url"),
+  linkUrl: text("link_url"),
+  position: text("position").default("banner"),
+  isActive: boolean("is_active").notNull().default(true),
+  order: integer("order").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+const siteSettingsTable = pgTable("site_settings", {
+  id: serial("id").primaryKey(),
+  siteName: text("site_name").notNull().default("Alpha Platform"),
+  siteNameAr: text("site_name_ar").default("منصة ألفا"),
+  logoUrl: text("logo_url"),
+  faviconUrl: text("favicon_url"),
+  primaryColor: text("primary_color").default("#D4AF37"),
+  secondaryColor: text("secondary_color").default("#1a2744"),
+  accentColor: text("accent_color").default("#F5C842"),
+  heroTitle: text("hero_title").default("Alpha Platform"),
+  heroTitleAr: text("hero_title_ar").default("منصة ألفا"),
+  heroSubtitle: text("hero_subtitle").default("Your gateway to technology and knowledge"),
+  heroSubtitleAr: text("hero_subtitle_ar").default("بوابتك نحو التقنية والمعرفة"),
+  sumerianText: text("sumerian_text").default("𒀭 𒂗 𒈬 𒄑 𒅆 𒊏 𒁾"),
+  footerText: text("footer_text").default("Alpha Platform — All rights reserved"),
+  footerTextAr: text("footer_text_ar").default("منصة ألفا — جميع الحقوق محفوظة"),
+  socialTelegram: text("social_telegram"),
+  socialTwitter: text("social_twitter"),
+  socialYoutube: text("social_youtube"),
+  socialInstagram: text("social_instagram"),
+  socialFacebook: text("social_facebook"),
+  socialWhatsapp: text("social_whatsapp"),
+  socialTiktok: text("social_tiktok"),
+  contactAddress: text("contact_address"),
+  contactAddressAr: text("contact_address_ar"),
+  contactEmail: text("contact_email"),
+  contactPhone: text("contact_phone"),
+  adminPassword: text("admin_password").default("alpha2024"),
+  maintenanceMode: boolean("maintenance_mode").notNull().default(false),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+const db = drizzle(pool, {
+  schema: { sectionsTable, platformsTable, newsPostsTable, advertisementsTable, siteSettingsTable },
+});
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ── Health ──
 app.get("/api/healthz", (_req, res) => res.json({ status: "ok" }));
 
-// ── Settings ──
 app.get("/api/settings", async (_req, res) => {
   try {
     const rows = await db.select().from(siteSettingsTable).limit(1);
@@ -39,7 +131,6 @@ app.patch("/api/settings", async (req, res) => {
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-// ── Sections ──
 app.get("/api/sections", async (_req, res) => {
   try {
     const rows = await db.select().from(sectionsTable).orderBy(asc(sectionsTable.order));
@@ -54,17 +145,17 @@ app.post("/api/sections", async (req, res) => {
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-app.get("/api/sections/:id", async (req, res) => {
+app.get("/api/sections/by-slug/:slug", async (req, res) => {
   try {
-    const row = await db.select().from(sectionsTable).where(eq(sectionsTable.id, Number(req.params.id))).limit(1);
+    const row = await db.select().from(sectionsTable).where(eq(sectionsTable.slug, req.params.slug)).limit(1);
     if (!row[0]) return res.status(404).json({ error: "Not found" });
     res.json(row[0]);
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-app.get("/api/sections/by-slug/:slug", async (req, res) => {
+app.get("/api/sections/:id", async (req, res) => {
   try {
-    const row = await db.select().from(sectionsTable).where(eq(sectionsTable.slug, req.params.slug)).limit(1);
+    const row = await db.select().from(sectionsTable).where(eq(sectionsTable.id, Number(req.params.id))).limit(1);
     if (!row[0]) return res.status(404).json({ error: "Not found" });
     res.json(row[0]);
   } catch (e) { res.status(500).json({ error: String(e) }); }
@@ -84,7 +175,6 @@ app.delete("/api/sections/:id", async (req, res) => {
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-// ── Platforms ──
 app.get("/api/platforms", async (req, res) => {
   try {
     let query = db.select().from(platformsTable).$dynamic();
@@ -124,7 +214,6 @@ app.delete("/api/platforms/:id", async (req, res) => {
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-// ── News ──
 app.get("/api/news", async (req, res) => {
   try {
     let rows = await db.select().from(newsPostsTable).orderBy(asc(newsPostsTable.createdAt));
@@ -171,7 +260,6 @@ app.delete("/api/news/:id", async (req, res) => {
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-// ── Advertisements ──
 app.get("/api/advertisements", async (req, res) => {
   try {
     let rows = await db.select().from(advertisementsTable).orderBy(asc(advertisementsTable.order));
@@ -201,7 +289,6 @@ app.delete("/api/advertisements/:id", async (req, res) => {
   } catch (e) { res.status(500).json({ error: String(e) }); }
 });
 
-// ── Stats ──
 app.get("/api/stats", async (_req, res) => {
   try {
     const [sections, platforms, news, featured, active] = await Promise.all([
