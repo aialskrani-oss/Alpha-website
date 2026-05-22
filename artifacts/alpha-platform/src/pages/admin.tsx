@@ -27,6 +27,16 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+  function toSlug(text: string): string {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^ws-]/g, "")
+      .replace(/s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+  
+
 const ADMIN_KEY = "alpha_admin_auth";
 
 type Section = { id: number; name: string; nameAr?: string | null; slug: string; icon: string; description?: string | null; descriptionAr?: string | null; order: number; isActive: boolean };
@@ -40,11 +50,11 @@ function SectionForm({ initial, sections, onSave, onCancel }: { initial?: Partia
   return (
     <div className="grid gap-4" dir="rtl">
       <div className="grid grid-cols-2 gap-3">
-        <div><Label className="font-tajawal mb-1 block">الاسم (English)</Label><Input value={form.name} onChange={(e) => set("name", e.target.value)} className="bg-background border-primary/20" /></div>
+        <div><Label className="font-tajawal mb-1 block">الاسم (English)</Label><Input value={form.name} onChange={(e) => { set("name", e.target.value); if (!form.slug || form.slug === toSlug(form.name)) set("slug", toSlug(e.target.value)); }} className="bg-background border-primary/20" /></div>
         <div><Label className="font-tajawal mb-1 block">الاسم (عربي)</Label><Input value={form.nameAr} onChange={(e) => set("nameAr", e.target.value)} className="bg-background border-primary/20 text-right" dir="rtl" /></div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <div><Label className="font-tajawal mb-1 block">Slug</Label><Input value={form.slug} onChange={(e) => set("slug", e.target.value)} className="bg-background border-primary/20" dir="ltr" /></div>
+        <div><Label className="font-tajawal mb-1 block">Slug <span className="text-muted-foreground text-xs">(أحرف إنجليزية وأرقام وشرطة فقط)</span></Label><Input value={form.slug} onChange={(e) => set("slug", toSlug(e.target.value))} placeholder="example-section" className="bg-background border-primary/20" dir="ltr" /></div>
         <div><Label className="font-tajawal mb-1 block">الأيقونة (lucide name)</Label><Input value={form.icon} onChange={(e) => set("icon", e.target.value)} className="bg-background border-primary/20" dir="ltr" /></div>
       </div>
       <div><Label className="font-tajawal mb-1 block">الوصف (عربي)</Label><Textarea value={form.descriptionAr} onChange={(e) => set("descriptionAr", e.target.value)} className="bg-background border-primary/20 text-right" dir="rtl" rows={3} /></div>
@@ -69,11 +79,11 @@ function PlatformForm({ initial, sections, onSave, onCancel }: { initial?: Parti
   return (
     <div className="grid gap-4" dir="rtl">
       <div className="grid grid-cols-2 gap-3">
-        <div><Label className="font-tajawal mb-1 block">الاسم (English)</Label><Input value={form.name} onChange={(e) => set("name", e.target.value)} className="bg-background border-primary/20" /></div>
+        <div><Label className="font-tajawal mb-1 block">الاسم (English)</Label><Input value={form.name} onChange={(e) => { set("name", e.target.value); if (!form.slug || form.slug === toSlug(form.name)) set("slug", toSlug(e.target.value)); }} className="bg-background border-primary/20" /></div>
         <div><Label className="font-tajawal mb-1 block">الاسم (عربي)</Label><Input value={form.nameAr} onChange={(e) => set("nameAr", e.target.value)} className="bg-background border-primary/20" dir="rtl" /></div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <div><Label className="font-tajawal mb-1 block">Slug</Label><Input value={form.slug} onChange={(e) => set("slug", e.target.value)} className="bg-background border-primary/20" dir="ltr" /></div>
+        <div><Label className="font-tajawal mb-1 block">Slug</Label><Input value={form.slug} onChange={(e) => set("slug", toSlug(e.target.value))} placeholder="example-name" className="bg-background border-primary/20" dir="ltr" /></div>
         <div><Label className="font-tajawal mb-1 block">النوع</Label>
           <Select value={form.type} onValueChange={(v) => set("type", v)}>
             <SelectTrigger className="bg-background border-primary/20"><SelectValue /></SelectTrigger>
@@ -122,7 +132,7 @@ function NewsForm({ initial, onSave, onCancel }: { initial?: Partial<NewsPost>; 
         <div><Label className="font-tajawal mb-1 block">العنوان (عربي)</Label><Input value={form.titleAr} onChange={(e) => set("titleAr", e.target.value)} className="bg-background border-primary/20" dir="rtl" /></div>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <div><Label className="font-tajawal mb-1 block">Slug</Label><Input value={form.slug} onChange={(e) => set("slug", e.target.value)} className="bg-background border-primary/20" dir="ltr" /></div>
+        <div><Label className="font-tajawal mb-1 block">Slug</Label><Input value={form.slug} onChange={(e) => set("slug", toSlug(e.target.value))} placeholder="example-name" className="bg-background border-primary/20" dir="ltr" /></div>
         <div><Label className="font-tajawal mb-1 block">الفئة</Label><Input value={form.category} onChange={(e) => set("category", e.target.value)} className="bg-background border-primary/20" /></div>
       </div>
       <div><Label className="font-tajawal mb-1 block">الملخص</Label><Textarea value={form.excerpt} onChange={(e) => set("excerpt", e.target.value)} className="bg-background border-primary/20" dir="rtl" rows={2} /></div>
