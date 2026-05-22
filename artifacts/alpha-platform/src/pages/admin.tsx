@@ -31,8 +31,8 @@ import { useToast } from "@/hooks/use-toast";
     return text
       .toLowerCase()
       .trim()
-      .replace(/[^ws-]/g, "")
-      .replace(/s+/g, "-")
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
       .replace(/-+/g, "-");
   }
   
@@ -64,7 +64,7 @@ function SectionForm({ initial, sections, onSave, onCancel }: { initial?: Partia
         <div className="flex items-center gap-3 pt-6"><Switch checked={form.isActive} onCheckedChange={(v) => set("isActive", v)} /><Label className="font-tajawal">نشط</Label></div>
       </div>
       <div className="flex gap-2 justify-start mt-2">
-        <Button onClick={() => onSave(form)} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
+        <Button onClick={() => { if (!form.slug?.trim()) { alert("الـ Slug مطلوب ولا يمكن أن يكون فارغاً"); return; } onSave(form); }} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
         <Button variant="outline" onClick={onCancel} className="font-tajawal border-primary/30">إلغاء</Button>
       </div>
     </div>
@@ -115,7 +115,7 @@ function PlatformForm({ initial, sections, onSave, onCancel }: { initial?: Parti
         <div className="flex items-center gap-2 pt-6"><Switch checked={form.isFeatured} onCheckedChange={(v) => set("isFeatured", v)} /><Label className="font-tajawal text-sm">مميز</Label></div>
       </div>
       <div className="flex gap-2 justify-start mt-2">
-        <Button onClick={() => onSave(form)} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
+        <Button onClick={() => { if (!form.slug?.trim()) { alert("الـ Slug مطلوب ولا يمكن أن يكون فارغاً"); return; } onSave(form); }} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
         <Button variant="outline" onClick={onCancel} className="font-tajawal border-primary/30">إلغاء</Button>
       </div>
     </div>
@@ -128,7 +128,7 @@ function NewsForm({ initial, onSave, onCancel }: { initial?: Partial<NewsPost>; 
   return (
     <div className="grid gap-4" dir="rtl">
       <div className="grid grid-cols-2 gap-3">
-        <div><Label className="font-tajawal mb-1 block">العنوان (English)</Label><Input value={form.title} onChange={(e) => set("title", e.target.value)} className="bg-background border-primary/20" /></div>
+        <div><Label className="font-tajawal mb-1 block">العنوان (English)</Label><Input value={form.title} onChange={(e) => { set("title", e.target.value); if (!form.slug || form.slug === toSlug(form.title)) set("slug", toSlug(e.target.value)); }} className="bg-background border-primary/20" /></div>
         <div><Label className="font-tajawal mb-1 block">العنوان (عربي)</Label><Input value={form.titleAr} onChange={(e) => set("titleAr", e.target.value)} className="bg-background border-primary/20" dir="rtl" /></div>
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -144,7 +144,7 @@ function NewsForm({ initial, onSave, onCancel }: { initial?: Partial<NewsPost>; 
         <div className="flex items-center gap-2"><Switch checked={form.isPublished} onCheckedChange={(v) => set("isPublished", v)} /><Label className="font-tajawal">منشور</Label></div>
       </div>
       <div className="flex gap-2 mt-2">
-        <Button onClick={() => onSave(form)} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
+        <Button onClick={() => { if (!form.slug?.trim()) { alert("الـ Slug مطلوب ولا يمكن أن يكون فارغاً"); return; } onSave(form); }} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
         <Button variant="outline" onClick={onCancel} className="font-tajawal border-primary/30">إلغاء</Button>
       </div>
     </div>
@@ -174,7 +174,7 @@ function AdForm({ initial, onSave, onCancel }: { initial?: Partial<Ad>; onSave: 
       </div>
       <div className="flex items-center gap-2"><Switch checked={form.isActive} onCheckedChange={(v) => set("isActive", v)} /><Label className="font-tajawal">نشط</Label></div>
       <div className="flex gap-2 mt-2">
-        <Button onClick={() => onSave(form)} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
+        <Button onClick={() => { if (!form.slug?.trim()) { alert("الـ Slug مطلوب ولا يمكن أن يكون فارغاً"); return; } onSave(form); }} className="font-tajawal bg-primary text-primary-foreground">حفظ</Button>
         <Button variant="outline" onClick={onCancel} className="font-tajawal border-primary/30">إلغاء</Button>
       </div>
     </div>
